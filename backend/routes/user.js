@@ -6,11 +6,11 @@ const Router = require('express').Router()
 Router.post('/login',
     userController.validateLogin,
     error.checkValidation,
-    userController.login)
+    error.catchAsync(userController.login))
 
 Router.post('/register',
     userController.validateRegister,
     error.checkValidation,
-    userController.register)
+    error.catchAsync(userController.register))
 
 module.exports = Router
