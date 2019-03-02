@@ -5,6 +5,7 @@
       v-for="task of tasks"
       :key="task._id"
       :task="task"
+      @deleteTask="deleteTask($event)"
       ></task-component>
   </div>
 </template>
@@ -21,6 +22,27 @@ export default {
     return {
       loading: true,
       tasks: []
+    }
+  },
+  methods: {
+    deleteTask(id) {
+      console.log(id)
+      this.tasks.filter((v,i) => { if(v._id==id) {
+        Vue.axios.delete(
+          `task/${id}`,
+          {
+            headers: {
+              'Authorization': localStorage.getItem('token')
+            }
+          }
+        )
+        .then(result => {
+            this.tasks.splice(i, 1)
+            console.log(result)
+        }).catch(err => {
+            console.log(err.message)
+        })
+      }})
     }
   },
   created() {

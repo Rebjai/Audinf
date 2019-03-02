@@ -7,7 +7,7 @@ module.exports = {
 
     //find all
     async findAll(req, res, next) {
-        const tasks = await Task.find({ user: req.userData._id })
+        const tasks = await Task.find({ user: req.userData._id }).select('name')
 
         return res.status(200).json({
             message: 'Obecne zadania.',

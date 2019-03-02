@@ -1,7 +1,7 @@
 <template>
     <div class="task-item">
         <span> {{ task.name }} </span>
-        <button>X</button>
+        <button @click="$emit('deleteTask', task._id)">X</button>
     </div>
 </template>
 
