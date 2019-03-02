@@ -1,5 +1,5 @@
 <template>
-    <div @keydown.enter="login" class="login">
+    <div @keydown.enter="login" id="login">
         
         <label>Username:</label>
         <input type="text" v-model="username">
@@ -10,7 +10,7 @@
         <button @click="login" class="l-button">Login</button>
         <div class="errors">
             <ul>
-                <li :style="errorStyle"
+                <li
                 v-for="(error, index) of errors"
                 :key="index"
                 > {{ error }} </li>
@@ -27,8 +27,7 @@ export default {
         return {
             username: '',
             password: '',
-            errors: [],
-            errorStyle: {color: 'red'}
+            errors: []
         }
     },
     methods: {
@@ -38,7 +37,7 @@ export default {
                 this.errors.push('Wypełnij pola.')
             }
             else {
-                Vue.axios.post('http://localhost:7777/api/user/login', {
+                Vue.axios.post('/user/login', {
                     username: this.username,
                     password: this.password
                 })
@@ -58,40 +57,39 @@ export default {
 </script>
 
 <style>
-    .login {
+    #login {
         display: grid;
-        align-items: center;
-        grid-template-columns: 1fr 1fr;
+        background-color: #222;
+        border-radius: 5px;
         grid-gap: 5px;
-        padding: 2em;
-        background-color: #191919;
-        border-radius: 5px;
+        padding: 10px;
+        margin: 5px;
     }
-
-    .l-button {
-        grid-column: 2 / 3;
-        width: 50%;
-        justify-self: right;
-    }
-
-    .login input, .login button{
-        background-color: transparent;
+    #login > input, button {
         border: solid #e7e7e7 1px;
-        padding: .15em .25em;
-        border-radius: 5px;
+        background: transparent;
+        border-radius: 10rem;
         outline: none;
+    }
+    #login > input {
         font-size: 1.25em;
+        padding: 5px 0 5px 10px;
     }
+    #login > button {
+        text-align: center;
+        margin-top: 10px;
+        width: auto;
+        padding: .45em .75em;
+        font-size: 1.05em;
+        justify-self: right;
 
-    @media screen and (min-width: 800px) {
-        .login {
-            width: 800px;
-        }
     }
-
-    ul {
+    #login ul {
         list-style-type: none;
+        padding: 10px;
         margin: 0;
-        padding: 0;
+    }
+    #login ul * {
+        color: red;
     }
 </style>

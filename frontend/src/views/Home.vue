@@ -1,18 +1,16 @@
 <template>
   <div id="home">
-    <h1>Home page</h1>
-    <ul>
+    <h1>To do</h1>
       <task-component
       v-for="task of tasks"
       :key="task._id"
       :task="task"
       ></task-component>
-    </ul>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import Vue from 'vue'
 import TaskComponent from '../components/Task.vue'
 
 export default {
@@ -26,8 +24,8 @@ export default {
     }
   },
   created() {
-    axios.get(
-      'http://localhost:7777/api/task',
+    Vue.axios.get(
+      '/task',
       {
         headers: {
           'Authorization': localStorage.getItem('token')
@@ -47,22 +45,14 @@ export default {
 
 <style>
   #home {
-    padding: 10px;
-    background-color: #191919;
+    display: grid;
+    background-color: #222;
     border-radius: 5px;
+    grid-gap: 5px;
+    padding: 10px;
+    margin: 5px;
   }
-
-  h1 {
+  #home > h1{
     text-align: center;
   }
-
-  ul {
-    display: grid;
-    grid-gap: 5px;
-  }
-  @media screen and (min-width: 800px) {
-        #home {
-            width: 800px;
-        }
-    }
 </style>

@@ -14,15 +14,24 @@ export default {
 <style>
     .task-item {
         display: grid;
-        grid-template-columns: 1fr 50px;
-        align-items: center;
-    }
-    .task-item > button {
-        border: solid #e7e7e7 1px;
+        background-color: #333;
+        padding: .2em .3em;
         border-radius: 5px;
-        background-color: transparent;
-        width: 25px;
-        height: 25px;
-        justify-self: center;
+        align-items: center;
+        grid-gap: 5px;
+        grid-template-columns: 1fr auto;
+    }
+
+    .task-item > span {
+        word-break: break-word;
+    }
+
+    .task-item > button {
+        width: 30px;
+        height: 30px;
+        align-self: start;
+        display: grid;
+        align-items: center;
+        justify-items: center;
     }
 </style>

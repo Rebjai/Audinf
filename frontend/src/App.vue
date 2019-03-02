@@ -2,34 +2,24 @@
   <div id="app">
 
     <nav v-if="!authenticated">
-      <div class="nav-item">
         <router-link to="/login">Login</router-link>
-      </div>
 
-      <div class="nav-item">
         <router-link to="/about">About</router-link>
-      </div>
     </nav>
 
     <nav v-else>
-      <div class="nav-item">
         <router-link to="/about">About</router-link>
-      </div>
 
-      <div class="nav-item">
         <router-link to="/">Home</router-link>
-      </div>
 
-      <div class="nav-item">
         <router-link to="/login" @click.native="logout()">Logout</router-link>
-      </div>
     </nav>
 
-    <div class="content">
-      <transition name="fade" mode="out-in">
+    <transition name="fade" mode="out-in">
+      <keep-alive>
         <router-view @authenticated="setAuthenticated" /> 
-      </transition>
-    </div>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
@@ -88,6 +78,7 @@ export default {
 
 <style>
   @import url('https://fonts.googleapis.com/css?family=Work+Sans');
+
   * {
     font-family: 'Work Sans', sans-serif;
     text-decoration: none;
@@ -97,12 +88,7 @@ export default {
   body {
     background-color: #111;
     margin: 0;
-  }
-
-  .content {
-    display: grid;
-    align-content: center;
-    justify-content: center;
+    padding: 0;
   }
 
   nav {
@@ -115,7 +101,7 @@ export default {
     padding: 1em .5em .1em .5em;
   }
 
-  .nav-item > a::after {
+   a::after {
     content: "";
     display: block;
     bottom: 0;
@@ -128,7 +114,12 @@ export default {
     opacity: 0;
   }
 
-  .nav-item > a:hover::after {
+   a {
+    width: 100%;
+    height: 100%;
+  }
+
+   a:hover::after {
     transform: scaleX(1);
     opacity: 1;
   }
