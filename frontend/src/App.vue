@@ -56,7 +56,7 @@ export default {
   computed: {
     isLoggedIn() {
       return localStorage.getItem('token') !== null ? true : false
-    },
+    }
   },
   methods: {
     setAuthenticated(status) {
@@ -72,6 +72,9 @@ export default {
     }
   },
   created() {
+    this.checkAndSetkAuthentication()
+  },
+  updated() {
     this.checkAndSetkAuthentication()
   }
 }
