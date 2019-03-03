@@ -3,22 +3,16 @@
 
     <nav v-if="!authenticated">
         <router-link to="/login">Login</router-link>
-
-        <router-link to="/about">About</router-link>
+        <router-link to="/register">Register</router-link>
     </nav>
 
     <nav v-else>
-        <router-link to="/about">About</router-link>
-
         <router-link to="/">Home</router-link>
-
         <router-link to="/login" @click.native="logout()">Logout</router-link>
     </nav>
 
     <transition name="fade" mode="out-in">
-      <keep-alive>
-        <router-view @authenticated="setAuthenticated" /> 
-      </keep-alive>
+      <router-view @authenticated="setAuthenticated" /> 
     </transition>
   </div>
 </template>
@@ -31,15 +25,22 @@ import store from './store'
 router.beforeEach((to, from, next) => {
   console.log(`${from.name} => ${to.name}`)
 
-  if(!store.methods.isLogged() && ['login', 'about'].some((v) => { return v == to.name })) {
+  //niezalogowany moze przegladac tylko login/register views
+  if(!store.methods.isLogged() && ['login', 'register'].some((v) => { return v == to.name })) {
     next()
   }
+
+  //przeniesie do home jezeli zalogowany bedzie chcial przegladac login/register/null views
   else if(store.methods.isLogged() && ['login', 'register', null].some((v) => { return v == to.name })) {
     router.replace({ name: 'home' })
   }
+
+  //przenosi zalogowanego
   else if(store.methods.isLogged()) {
     next()
   }
+
+  //przenosi do logowania jezeli zaden z warunkow nie zostal spelniony
   else {
     router.replace({ name: 'login' })
   }
@@ -55,7 +56,7 @@ export default {
   computed: {
     isLoggedIn() {
       return localStorage.getItem('token') !== null ? true : false
-    }
+    },
   },
   methods: {
     setAuthenticated(status) {

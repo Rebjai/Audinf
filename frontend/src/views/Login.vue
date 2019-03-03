@@ -1,5 +1,5 @@
 <template>
-    <div @keydown.enter="login" id="login">
+    <div @keyup.enter="login" id="login">
         
         <label>Username:</label>
         <input type="text" v-model="username">
@@ -42,8 +42,11 @@ export default {
                     password: this.password
                 })
                 .then(result => {
-                    console.log(result)
                     localStorage.setItem('token', result.data.token)
+                    localStorage.setItem('username', this.username)
+                    Vue.axios.defaults.headers.Authorization = localStorage.getItem('token')
+                    this.username = ''
+                    this.password = ''
                     this.$router.push({ name: 'home' })
                     this.$emit('authenticated', true)
                 })

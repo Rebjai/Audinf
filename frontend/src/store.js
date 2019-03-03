@@ -5,6 +5,7 @@ export default {
         },
         clearUserData() {
             localStorage.removeItem('token')
+            localStorage.removeItem('username')
         }
     }
 }

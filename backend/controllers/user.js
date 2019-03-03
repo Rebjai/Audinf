@@ -37,7 +37,7 @@ module.exports = {
             },
             JWT_SECRET,
             {
-                expiresIn: 6000 // 100 mins
+                expiresIn: 600 // 10 mins
             }
         )
         
