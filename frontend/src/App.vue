@@ -2,13 +2,13 @@
   <div id="app">
 
     <nav v-if="!authenticated">
-        <router-link to="/login">Login</router-link>
-        <router-link to="/register">Register</router-link>
+          <router-link to="/login">Zaloguj</router-link>
+          <router-link to="/register">Zarejestruj</router-link>
     </nav>
 
     <nav v-else>
-        <router-link to="/">Home</router-link>
-        <router-link to="/login" @click.native="logout()">Logout</router-link>
+        <router-link to="/">Zadania</router-link>
+        <router-link to="/login" @click.native="logout()">Wyloguj</router-link>
     </nav>
 
     <transition name="fade" mode="out-in">
@@ -96,13 +96,17 @@ export default {
   }
 
   nav {
+    position: sticky;
+    left: 0;
+    top: 0;
+    background-color: rgba(17, 17, 17, 0.75);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 75px));
+    grid-template-columns: repeat(auto-fit, minmax(50px, auto));
+    grid-gap: 12px;
     justify-content: right;
     text-align: center;
-    overflow: hidden;
     margin-bottom: 1em;
-    padding: 1em .5em .1em .5em;
+    padding: 10px 20px;
   }
 
    a::after {
@@ -116,11 +120,6 @@ export default {
     transform: scaleX(0);
     transition: all .25s;
     opacity: 0;
-  }
-
-   a {
-    width: 100%;
-    height: 100%;
   }
 
    a:hover::after {

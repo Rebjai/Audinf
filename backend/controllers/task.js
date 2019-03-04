@@ -7,7 +7,7 @@ module.exports = {
 
     //find all
     async findAll(req, res, next) {
-        const tasks = await Task.find({ user: req.userData._id }).select('name')
+        const tasks = await Task.find({ user: req.userData._id }).select('name term').sort({'createdAt': -1})
 
         return res.status(200).json({
             message: 'Obecne zadania.',
@@ -67,13 +67,8 @@ module.exports.validateTask = [
 
     check('name')
         .trim()
-        .isLength({ max: 50 })
-        .withMessage('Za długa treść zadania.'),
-
-    check('term')
-        .optional()
-        .isNumeric()
-        .withMessage('Zły format czasu.')
+        .isLength({ max: 100 })
+        .withMessage('Za długa treść zadania. (max. 100 znaków)')
 ]
 
 module.exports.validateTaskIsExist = [

@@ -10,7 +10,8 @@ exports.verifyToken = (req, res, next) => {
     }
     catch(err) {
         return res.status(400).json({
-            message: "Błąd z sesją."
+            message: "Błąd z sesją.",
+            isLogged: false
         })
     }
 

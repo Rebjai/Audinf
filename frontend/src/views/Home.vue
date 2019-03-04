@@ -1,13 +1,16 @@
 <template>
   <div id="home">
     <span>Zalogowany jako: <span class="username"> {{ username }} </span></span>
-    <h1>To do</h1>
+    <h1>Do zrobienia:</h1>
       <div class="createTask">
-        <input type="text" v-model='newTask'>
+        <input type="text" v-model='newTask.name'>
         <button @click="createTask">
           <i class="fas fa-plus"></i>
         </button>
-        <ul>
+        <div class="createTaskDate">
+          <input type="date" v-model='newTask.term'>
+        </div>
+        <ul class="createTaskErrors">
           <li
           v-for="(error, index) of errors"
           :key="index"
@@ -35,7 +38,10 @@ export default {
   data() {
     return {
       username: '',
-      newTask: '',
+      newTask: {
+        name: '',
+        term: ''
+      },
       errors: [],
       loading: true,
       tasks: []
@@ -53,19 +59,23 @@ export default {
       }})
     },
     createTask() {
-      if(this.newTask.trim() == '') {
+      if(this.newTask.name.trim() == '') {
         this.errors.push('Podaj treść zadania.')
       }
       else {
         Vue.axios.post(
           '/task',
           {
-            name: this.newTask
+            name: this.newTask.name,
+            term: this.newTask.term
           },
         )
         .then(result => {
-          this.tasks.push(result.data.task)
-          this.newTask = ''
+          this.tasks.unshift(result.data.task)
+          this.newTask = {
+            name: '',
+            term: ''
+          }
         })
         .catch(error => {
           this.errors = []
@@ -104,13 +114,22 @@ export default {
   #home > h1{
     text-align: center;
   }
-  .createTask {
+  .createTaskErrors {
+    grid-column: 1 / -1;
+  }
+  .createTask{
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 1fr auto;
     align-items: center;
   }
-  .createTask > button, .createTask > input {
+  .createTaskDate {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+  .createTask > button, .createTask > input, .createTaskDate > input {
     outline: none;
     background-color: transparent;
     border: solid #e7e7e7 1px;
@@ -124,11 +143,14 @@ export default {
     width: 1.75em;
     height: 1.75em;
   }
-  .createTask > input {
+  .createTask > input, .createTaskDate > input {
     padding-left: 10px;
     font-size: 1.10em;
-    padding: 5px 0 5px 10px;
+    padding: 5px 10px 5px 10px;
     border-radius: 10rem;
+  }
+  .createTaskDate > input {
+    font-size: .9em;
   }
   .username {
     background-color: #333;

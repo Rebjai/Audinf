@@ -41,11 +41,7 @@ export default {
         register() {
             this.errors = []
             this.success = false
-            if(
-                this.user.username == '' &&
-                this.user.password == '' &&
-                this.user.passwordConfirmation == ''
-            ){
+            if( this.user.username == '' && this.user.password == '' && this.user.passwordConfirmation == '' ){
                 this.errors.push('Wypełnij pola.')
             }
             else {
