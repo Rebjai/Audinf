@@ -1,7 +1,6 @@
 <template>
   <div id="home">
     <span>Zalogowany jako: <span class="username"> {{ username }} </span></span>
-    <h1>Do zrobienia:</h1>
       <div class="createTask">
         <input type="text" v-model='newTask.name'>
         <button @click="createTask">
@@ -17,13 +16,15 @@
           > {{ error }} </li>
         </ul>
       </div>
-      <span v-if="loading"> Wczytywanie zadań </span>
-      <task-component
-      v-for="task of tasks"
-      :key="task._id"
-      :task="task"
-      @deleteTask="deleteTask($event)"
-      ></task-component>
+      <span v-if="loading"> Wczytywanie zadań... </span>
+      <transition-group name="fadeTask" tag="div" class="task-list">
+        <task-component
+        v-for="task of tasks"
+        :key="task._id"
+        :task="task"
+        @deleteTask="deleteTask($event)"
+        ></task-component>
+      </transition-group>
   </div>
 </template>
 
@@ -59,6 +60,7 @@ export default {
       }})
     },
     createTask() {
+      this.errors = []
       if(this.newTask.name.trim() == '') {
         this.errors.push('Podaj treść zadania.')
       }
@@ -164,5 +166,38 @@ export default {
   }
   ul li {
     color: red;
+  }
+  .task-list {
+    overflow: hidden;
+  }
+
+  .fadeTask-enter-active, .fadeTask-leave-active {
+    transition: all .5s
+  }
+  .fadeTask-enter, .fadeTask-leave-to {
+    opacity: 0;
+    transform: rotateX(90deg)
+  }
+
+  @media screen and (min-width: 810px) {
+    .createTask {
+      grid-template-columns: 1fr 1fr auto;
+    }
+    .createTask > input[type=text] {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+    }
+    .createTask > .createTaskDate {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }
+    .createTask > button {
+      grid-column: 3 / 4;
+      grid-row: 1 / 2;
+    }
+    .createTaskErrors {
+      grid-column: 1 / -1;
+      grid-row: 2 / 3;
+    }
   }
 </style>

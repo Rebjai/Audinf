@@ -56,8 +56,8 @@ export default {
     }
 
     .task-item > button {
-        width: 100%;
-        height: 100%;
+        width: 2em;
+        height: 2em;
         align-self: start;
         display: grid;
         align-items: center;

@@ -11,9 +11,11 @@
         <router-link to="/login" @click.native="logout()">Wyloguj</router-link>
     </nav>
 
-    <transition name="fade" mode="out-in">
-      <router-view @authenticated="setAuthenticated" /> 
-    </transition>
+    <div class="content">
+      <transition name="fade" mode="out-in">
+        <router-view @authenticated="setAuthenticated" /> 
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -139,5 +141,19 @@ export default {
   .fade-leave-to {
     opacity: 0;
     transform: translateY(10px);
+  }
+
+  .content {
+    display: grid;
+  }
+  @media screen and (min-width: 825px) {
+    .content > * {
+      justify-self: center;
+      width: 800px;
+    }
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
   }
 </style>

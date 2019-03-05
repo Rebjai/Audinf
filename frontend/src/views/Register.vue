@@ -1,15 +1,15 @@
 <template>
     <div @keyup.enter="register" id="register">
-        <label>Username:</label>
+        <label>Nazwa użytkownika:</label>
         <input type="text" v-model="user.username">
 
-        <label>Password:</label>
+        <label>Hasło:</label>
         <input type="password" v-model="user.password">
 
-        <label>Confirm password:</label>
+        <label>Powtórz hasło:</label>
         <input type="password" v-model="user.passwordConfirmation">
 
-        <button @click="register">Register</button>
+        <button @click="register">Zarejestruj</button>
         <div class="errors">
             <ul>
                 <li
@@ -45,6 +45,15 @@ export default {
                 this.errors.push('Wypełnij pola.')
             }
             else {
+                if(this.user.username.trim().length < 5 || this.user.username.trim().length > 16)
+                    this.errors.push('Nazwa użytkownika powinna zawierać od 5 do 16 znaków.')
+                if(this.user.password.length < 8 || this.user.password.length > 15)
+                    this.errors.push('Hasło musi posiadać długość od 8 do 15 znaków.')
+                if(this.user.password !== this.user.passwordConfirmation)
+                    this.errors.push('Hasła muszą być takie same.')
+            }
+            if(!this.errors.length) {
+                console.log('yey!')
                 Vue.axios.post('/user/register', {
                     username: this.user.username,
                     password: this.user.password,
@@ -104,7 +113,17 @@ export default {
     #register ul * {
         color: red;
     }
+    #register ul li {
+        margin-top: 15px;
+    }
+    #register ul li:first-child {
+        margin-top: 0;
+    }
     #register span {
         color: rgb(46, 204, 46);
+    }
+
+    @media screen and (min-width: 800px) {
+        #register { width: 400px }
     }
 </style>

@@ -1,13 +1,13 @@
 <template>
     <div @keyup.enter="login" id="login">
         
-        <label>Username:</label>
+        <label>Nazwa użytkownika:</label>
         <input type="text" v-model="username">
 
-        <label>Password:</label>
+        <label>Hasło:</label>
         <input type="password" v-model="password">
 
-        <button @click="login" class="l-button">Login</button>
+        <button @click="login" class="l-button">Zaloguj</button>
         <div class="errors">
             <ul>
                 <li
@@ -92,7 +92,14 @@ export default {
         padding: 10px;
         margin: 0;
     }
-    #login ul * {
-        color: red;
+    #login ul li {
+        margin-top: 15px;
+    }
+    #login ul li:first-child {
+        margin-top: 0;
+    }
+
+    @media screen and (min-width: 800px) {
+        #login { width: 400px }
     }
 </style>
