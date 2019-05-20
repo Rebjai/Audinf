@@ -35,5 +35,7 @@ Passwords are hashed.
 After logging in, the user can add tasks with an optional deadline.
 The date has three colors
 - White (More than one day left)
-- Yellow (The deadline is today)
 - Red (Is after deadline)
+- Yellow (The deadline is today)
+
+![Registration](./frontend/public/img/3.jpg)
