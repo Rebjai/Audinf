@@ -2,7 +2,7 @@
 
 A simple application written in Vue using the backend written in Nodejs.
 
-## Purpose
+## Features
 - Registration and login.
 - Adding and deleting tasks.
 - Optional task deadline.
