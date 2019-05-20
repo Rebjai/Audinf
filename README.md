@@ -38,4 +38,4 @@ The date has three colors
 - Red (Is after deadline)
 - Yellow (The deadline is today)
 
-![Registration](./frontend/public/img/3.jpg)
+![Registration](./frontend/public/img/3.JPG)
