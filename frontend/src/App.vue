@@ -25,8 +25,6 @@ import store from './store'
 
 
 router.beforeEach((to, from, next) => {
-  console.log(`${from.name} => ${to.name}`)
-
   //niezalogowany moze przegladac tylko login/register views
   if(!store.methods.isLogged() && ['login', 'register'].some((v) => { return v == to.name })) {
     next()

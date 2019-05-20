@@ -53,7 +53,6 @@ export default {
                     this.errors.push('Hasła muszą być takie same.')
             }
             if(!this.errors.length) {
-                console.log('yey!')
                 Vue.axios.post('/user/register', {
                     username: this.user.username,
                     password: this.user.password,
