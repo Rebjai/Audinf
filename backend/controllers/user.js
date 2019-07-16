@@ -15,12 +15,14 @@ module.exports = {
             const user = await new User({
                 _id: mongoose.Types.ObjectId(),
                 username: req.body.username,
-                password: encrypted
+                password: encrypted,
+                name:req.body.name,
+                semester:req.body.semester
             }).save()
 
 
             return res.json({
-                message: 'Pomyślnie zarejestrowano.'
+                message: 'Succesful register.'
             })
         })
 
@@ -37,12 +39,12 @@ module.exports = {
             },
             JWT_SECRET,
             {
-                expiresIn: 600 // 10 mins
+                expiresIn: 3600 //(seconds) 60 mins
             }
         )
         
         return res.status(200).json({
-            message: 'Pomyślnie zalogowano',
+            message: 'Acceso Permitido',
             token
         })
 
@@ -53,21 +55,21 @@ module.exports.validateRegister = [
     check('username')
         .trim()
         .isLength({ min: 5, max: 16 })
-        .withMessage("Nazwa użytkownika powinna zawierać od 5 do 16 znaków.")
+        .withMessage("Username should be 8 characters")
     
         .isAlphanumeric()
-        .withMessage("Nazwa użytkownika może zawierać tylko litery i liczby.")
+        .withMessage("The username can only contain letters and numbers.")
 
         .custom(async value => await User.findOne({ username: value }) == null)
-        .withMessage("Nazwa użytkownika jest zajęta."),
+        .withMessage("Can't find the user"),
     
     check('password')
-        .isLength({ min: 8, max: 15 })
-        .withMessage("Hasło musi posiadać długość od 8 do 15 znaków."),
+        .isLength({ min: 4, max: 15 })
+        .withMessage("Password must be 4 characters long"),
     
     check('passwordConfirmation')
         .custom((value, {req}) => value == req.body.password)
-        .withMessage("Hasła muszą być takie same.")
+        .withMessage("Passwords must be the same")
 ]
 
 module.exports.validateLogin = [
@@ -88,5 +90,5 @@ module.exports.validateLogin = [
                 )
             })
         })
-        .withMessage("Niepoprawna nazwa użytkownika lub hasło.")
+        .withMessage("Incorrect username or password.")
 ]

@@ -11,7 +11,8 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-mongoose.connect(`mongodb+srv://${USER_NAME}:${PASSWORD}@${CLUSTER}.mongodb.net/${DB_NAME}`, {
+// mongoose.connect(`mongodb+srv://${USER_NAME}:${PASSWORD}@${CLUSTER}.mongodb.net/${DB_NAME}`, {
+    mongoose.connect(`mongodb://localhost:27017/${DB_NAME}`,{
     useNewUrlParser: true
 })
 

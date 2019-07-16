@@ -1,15 +1,15 @@
 <template>
     <div @keyup.enter="register" id="register">
-        <label>Nazwa użytkownika:</label>
+        <label>Número de Control:</label>
         <input type="text" v-model="user.username">
 
-        <label>Hasło:</label>
+        <label>Contraseña:</label>
         <input type="password" v-model="user.password">
 
-        <label>Powtórz hasło:</label>
+        <label>Confirmar Contraseña:</label>
         <input type="password" v-model="user.passwordConfirmation">
 
-        <button @click="register">Zarejestruj</button>
+        <button @click="register">Regristrarse</button>
         <div class="errors">
             <ul>
                 <li
@@ -17,7 +17,7 @@
                 :key="index"
                 > {{ error }} </li>
             </ul>
-            <span v-if="success">Pomyślnie zarejestrowano</span>
+            <span v-if="success">Registro Exitoso</span>
         </div>
     </div>
 </template>
@@ -45,12 +45,12 @@ export default {
                 this.errors.push('Wypełnij pola.')
             }
             else {
-                if(this.user.username.trim().length < 5 || this.user.username.trim().length > 16)
-                    this.errors.push('Nazwa użytkownika powinna zawierać od 5 do 16 znaków.')
-                if(this.user.password.length < 8 || this.user.password.length > 15)
-                    this.errors.push('Hasło musi posiadać długość od 8 do 15 znaków.')
+                if(this.user.username.trim().length < 8 || this.user.username.trim().length > 8)
+                    this.errors.push('El número de control debe tener 8 números')
+                if(this.user.password.length < 4 || this.user.password.length > 4)
+                    this.errors.push('La contraseña debe de ser de 4 caracteres')
                 if(this.user.password !== this.user.passwordConfirmation)
-                    this.errors.push('Hasła muszą być takie same.')
+                    this.errors.push('Las contraseñas deben coincidir')
             }
             if(!this.errors.length) {
                 Vue.axios.post('/user/register', {

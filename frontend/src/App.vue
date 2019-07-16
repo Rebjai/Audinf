@@ -2,13 +2,13 @@
   <div id="app">
 
     <nav v-if="!authenticated">
-          <router-link to="/login">Zaloguj</router-link>
-          <router-link to="/register">Zarejestruj</router-link>
+          <router-link to="/login">Acceso</router-link>
+          <router-link to="/register">Registro</router-link>
     </nav>
 
     <nav v-else>
-        <router-link to="/">Zadania</router-link>
-        <router-link to="/login" @click.native="logout()">Wyloguj</router-link>
+        <router-link to="/">Comentarios / observaciones</router-link>
+        <router-link to="/login" @click.native="logout()">Salir</router-link>
     </nav>
 
     <div class="content">
@@ -66,6 +66,8 @@ export default {
       this.authenticated = localStorage.getItem('token') !== null ? true : false
     },
     logout() {
+      // TODO
+      //send logged out tokken
       store.methods.clearUserData()
       this.authenticated = false
       this.$router.replace({ name: 'login' })

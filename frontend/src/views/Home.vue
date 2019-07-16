@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <span>Zalogowany jako: <span class="username"> {{ username }} </span></span>
+    <span>Nombre: <span class="username"> {{ username }} </span></span>
       <div class="createTask">
         <input type="text" v-model='newTask.name'>
         <button @click="createTask">
@@ -16,7 +16,7 @@
           > {{ error }} </li>
         </ul>
       </div>
-      <span v-if="loading"> Wczytywanie zadań... </span>
+      <span v-if="loading"> Espera un momento... </span>
       <transition-group name="fadeTask" tag="div" class="task-list">
         <task-component
         v-for="task of tasks"
@@ -62,7 +62,7 @@ export default {
     createTask() {
       this.errors = []
       if(this.newTask.name.trim() == '') {
-        this.errors.push('Podaj treść zadania.')
+        this.errors.push('No puedo hacer una tarea vacía')
       }
       else {
         Vue.axios.post(

@@ -1,13 +1,13 @@
 <template>
     <div @keyup.enter="login" id="login">
         
-        <label>Nazwa użytkownika:</label>
+        <label>Número de control:</label>
         <input type="text" v-model="username">
 
-        <label>Hasło:</label>
+        <label>Contraseña:</label>
         <input type="password" v-model="password">
 
-        <button @click="login" class="l-button">Zaloguj</button>
+        <button @click="login" class="l-button">Entrar</button>
         <div class="errors">
             <ul>
                 <li
@@ -34,7 +34,7 @@ export default {
         login() {
             this.errors = []
             if(this.username == '' || this.password == '') {
-                this.errors.push('Wypełnij pola.')
+                this.errors.push('Ingresa tu número de control')
             }
             else {
                 Vue.axios.post('/user/login', {

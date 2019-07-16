@@ -1,7 +1,7 @@
 {
-    "DB_NAME": "",
+    "DB_NAME": "auditoria",
     "USER_NAME": "",
     "PASSWORD": "",
     "CLUSTER": "",
-    "JWT_SECRET": ""
+    "JWT_SECRET": "audito"
 }

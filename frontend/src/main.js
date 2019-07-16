@@ -7,7 +7,7 @@ import VueAxios from 'vue-axios'
 import store from './store'
 
 const axiosInstance = axios.create({ 
-  baseURL: 'http://192.168.1.7:7777/api',
+  baseURL: 'http://localhost:7777/api',
   headers: {
     'Authorization': localStorage.getItem('token')
   }
