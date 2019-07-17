@@ -1,13 +1,19 @@
 <template>
     <div @keyup.enter="register" id="register">
-        <label>Número de Control:</label>
+        <label>Número de Control*:</label>
         <input type="text" v-model="user.username">
 
-        <label>Contraseña:</label>
+        <label>Contraseña*:</label>
         <input type="password" v-model="user.password">
 
-        <label>Confirmar Contraseña:</label>
+        <label>Confirmar Contraseña*:</label>
         <input type="password" v-model="user.passwordConfirmation">
+        
+        <label>Nombre:</label>
+        <input type="text" v-model="user.name">
+        
+        <label>semestre:</label>
+        <input type="number" v-model="user.semester">
 
         <button @click="register">Regristrarse</button>
         <div class="errors">
@@ -33,7 +39,9 @@ export default {
             user: {
                 username: '',
                 password: '',
-                passwordConfirmation: ''
+                passwordConfirmation: '',
+                name: '',
+                semester: 0
             }
         }
     },
@@ -56,7 +64,9 @@ export default {
                 Vue.axios.post('/user/register', {
                     username: this.user.username,
                     password: this.user.password,
-                    passwordConfirmation: this.user.passwordConfirmation
+                    passwordConfirmation: this.user.passwordConfirmation,
+                    name: this.user.name,
+                    semester: this.user.semester
                 })
                 .then(result => {
                     this.success = true

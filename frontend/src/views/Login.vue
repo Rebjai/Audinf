@@ -42,8 +42,12 @@ export default {
                     password: this.password
                 })
                 .then(result => {
+                    console.log(result.data);
+                    
                     localStorage.setItem('token', result.data.token)
                     localStorage.setItem('username', this.username)
+                    localStorage.setItem('name', result.data.name)
+                    localStorage.setItem('semester', result.data.semester)
                     Vue.axios.defaults.headers.Authorization = localStorage.getItem('token')
                     this.username = ''
                     this.password = ''

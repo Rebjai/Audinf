@@ -1,6 +1,8 @@
 <template>
   <div id="home">
-    <span>Nombre: <span class="username"> {{ username }} </span></span>
+    <span>N. control: <span class="username"> {{ username }} </span></span>
+    <span>Nombre: <span class="username"> {{ name }} </span></span>
+    
       <div class="createTask">
         <input type="text" v-model='newTask.name'>
         <button @click="createTask">
@@ -39,6 +41,7 @@ export default {
   data() {
     return {
       username: '',
+      name: '',
       newTask: {
         name: '',
         term: ''
@@ -87,6 +90,7 @@ export default {
     },
     setUsernameFromToken() {
       this.username = localStorage.getItem('username')
+      this.name = localStorage.getItem('name')
     }
   },
   created() {
