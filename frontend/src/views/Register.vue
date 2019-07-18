@@ -1,5 +1,11 @@
 <template>
     <div @keyup.enter="register" id="register">
+        <label>Tipo de usuario:</label>
+        <select name="userType" id="userType">
+            <option value="Estudiante">Estudiante</option>
+            <option value="Docente">Docente </option>
+        </select>
+
         <label>Número de Control*:</label>
         <input type="text" v-model="user.username">
 
@@ -13,9 +19,11 @@
         <input type="text" v-model="user.name">
         
         <label>semestre:</label>
-        <input type="number" v-model="user.semester">
+        <input type="number" value="1" min="1" max="8" v-model="user.semester">
 
-        <button @click="register">Regristrarse</button>
+        
+
+        <button @click="register">Registrarse</button>
         <div class="errors">
             <ul>
                 <li
@@ -41,7 +49,7 @@ export default {
                 password: '',
                 passwordConfirmation: '',
                 name: '',
-                semester: 0
+                semester: 1
             }
         }
     },
@@ -73,6 +81,8 @@ export default {
                     this.user.username = ''
                     this.user.password = ''
                     this.user.passwordConfirmation = ''
+                    this.user.name = ''
+                    this.user.semester = 1
                     setTimeout(() => {
                         this.success = false
                     }, 1500)
@@ -101,7 +111,7 @@ export default {
         border-radius: 10rem;
         outline: none;
     }
-    #register > input {
+    #register > input, select {
         font-size: 1.25em;
         padding: 5px 0 5px 10px;
     }
@@ -130,6 +140,18 @@ export default {
     }
     #register span {
         color: rgb(46, 204, 46);
+    }
+    #register select {
+        border: solid #e7e7e7 1px;
+        background: transparent;
+        border-radius: 10rem;
+        outline: none;
+    }
+    select > option{
+        border: solid #e7e7e7 1px;
+        background: black;
+        border-radius: 10rem;
+        outline: none;
     }
 
     @media screen and (min-width: 800px) {
