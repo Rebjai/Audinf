@@ -1,6 +1,10 @@
 <template>
   <div id="home">
     <span>
+      IP del equipo:
+      <span class="username">{{ ip }}</span>
+    </span>
+    <span>
       N. control:
       <span class="username">{{ username }}</span>
     </span>
@@ -23,10 +27,17 @@
           <label :for="'checkbox'+tec">{{ tec }}</label>
         </div>
       </div>
+      <div class="other tec">
+        <input type="checkbox" name="checkbox-other" id="option-other" v-model="isOther" />
+        <label for="option-other">otro</label>
+        <input v-if="isOther" type="text" name id v-model="other" @keypress.enter="pushToStack" />
+      </div>
       <div class="selected">selected: {{selected}}</div>
-      <div v-for="tec in stack" :key="tec" class="stack-item">
+      <div v-for="tec in selected" :key="tec" class="stack-item" @click="popFromStack(tec)">
         <span>{{tec}}</span>
       </div>
+      <!-- end checkbox -->
+
       <div class="createTask">
         <input type="text" v-model="newTask.name" />
         <button @click="createTask">
@@ -55,6 +66,7 @@
 <script>
 import Vue from "vue";
 import TaskComponent from "../components/Task.vue";
+import getUserIP from "../utils/getClientIP";
 
 export default {
   components: {
@@ -65,6 +77,9 @@ export default {
       username: "",
       name: "",
       semester: 0,
+      isOther: false,
+      other: "",
+      ip: "0.0.0.0",
       selected: [],
       stackOptions: [
         {
@@ -87,8 +102,12 @@ export default {
     };
   },
   methods: {
-    addOptionToStack(opt) {
-      this.stack.push(opt);
+    popFromStack(tec) {
+      alert(tec);
+    },
+    pushToStack() {
+      this.selected.push(this.other);
+      this.other = "";
     },
     deleteTask(id) {
       this.tasks.filter((v, i) => {
@@ -131,20 +150,32 @@ export default {
       this.username = localStorage.getItem("username");
       this.name = localStorage.getItem("name");
       this.semester = localStorage.getItem("semester");
+    },
+    setClientIP() {
+      console.log("setting ip");
+      
+      let self = this;
+      getUserIP(function(ip) {
+        // Usage
+        console.log("Got IP! :" + ip);
+        self.ip = ip;
+      });
     }
   },
   created() {
-    this.setUsernameFromToken(),
-      //Pobieranie zadan z bazy danych
-      Vue.axios
-        .get("/task")
-        .then(result => {
-          this.tasks = result.data.tasks;
-          this.loading = false;
-        })
-        .catch(error => {
-          //todo: zrobisz wyswietlanie errorow
-        });
+    this.setUsernameFromToken();
+    this.setClientIP();
+
+    //Pobieranie zadan z bazy danych
+    Vue.axios
+      .get("/task")
+      .then(result => {
+        this.tasks = result.data.tasks;
+        this.loading = false;
+      })
+      .catch(error => {
+        //todo: zrobisz wyswietlanie errorow
+      });
   }
 };
 </script>
@@ -248,6 +279,13 @@ ul li {
   .createTaskErrors {
     grid-column: 1 / -1;
     grid-row: 2 / 3;
+  }
+  .stack-item {
+    display: inline-block;
+    margin: 0 0.25rem;
+    padding: 0.5rem;
+    border: 2px solid #e7e7e7;
+    border-radius: 15px;
   }
 }
 </style>
