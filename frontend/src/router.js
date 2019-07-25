@@ -15,6 +15,16 @@ export default new Router({
       component: TecStack
     },
     {
+      path: '/shome',
+      name: 'shome',
+      component: TecStack
+    },
+    {
+      path: '/thome',
+      name: 'thome',
+      component: TecStack
+    },
+    {
       path: '/login',
       name: 'login',
       component: Login

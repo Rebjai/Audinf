@@ -6,6 +6,7 @@
       <option value="student">Estudiante</option>
       <option value="teacher">Docente</option>
       <option value="device">Equipo</option>
+      <option value="support">Soporte</option>
     </select>
     <!-- estudiante -->
     <div v-show="userType == 'student'" @keyup.enter="register" id="register-student">
@@ -46,6 +47,13 @@
 
       <label>Nombre:</label>
       <input type="text" v-model="teacher.name" />
+      <button @click="registerTeacher">Registrarse</button>
+      <div class="errors">
+        <ul>
+          <li v-for="(error, index) of errors" :key="index">{{ error }}</li>
+        </ul>
+        <span v-if="success">Registro Exitoso</span>
+      </div>
     </div>
 
     <!-- equipo -->
@@ -60,6 +68,13 @@
 
       <label>sala:</label>
       <input type="text" v-model="device.room" />
+      <button @click="registerSupport">Registrarse</button>
+      <div class="errors">
+        <ul>
+          <li v-for="(error, index) of errors" :key="index">{{ error }}</li>
+        </ul>
+        <span v-if="success">Registro Exitoso</span>
+      </div>
     </div>
     <!-- mantenimiento -->
   </div>
@@ -142,6 +157,94 @@ export default {
             this.user.passwordConfirmation = "";
             this.user.name = "";
             this.user.semester = 1;
+            setTimeout(() => {
+              this.success = false;
+            }, 1500);
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          });
+      }
+    },
+    registerTeacher() {
+      this.errors = [];
+      this.success = false;
+      if (
+        this.teacher.username == "" &&
+        this.teacher.password == "" &&
+        this.teacher.passwordConfirmation == ""
+      ) {
+        this.errors.push("ingresa la contraseña");
+      } else {
+        if (
+          this.teacher.username.trim().length < 8 ||
+          this.teacher.username.trim().length > 8
+        )
+          this.errors.push("El número de control debe tener 8 números");
+        if (this.teacher.password.length < 4 || this.teacher.password.length > 4)
+          this.errors.push("La contraseña debe de ser de 4 caracteres");
+        if (this.teacher.password !== this.teacher.passwordConfirmation)
+          this.errors.push("Las contraseñas deben coincidir");
+      }
+      if (!this.errors.length) {
+        Vue.axios
+          .post("/teacher/register", {
+            username: this.teacher.username,
+            password: this.teacher.password,
+            passwordConfirmation: this.teacher.passwordConfirmation,
+            name: this.teacher.name
+          })
+          .then(result => {
+            this.success = true;
+            this.teacher.username = "";
+            this.teacher.password = "";
+            this.teacher.passwordConfirmation = "";
+            this.teacher.name = "";
+            setTimeout(() => {
+              this.success = false;   
+            }, 1500);
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          });
+      }
+    },
+    registerSupport() {
+      this.errors = [];
+      this.success = false;
+      if (
+        this.support.username == "" &&
+        this.support.password == "" &&
+        this.support.passwordConfirmation == ""
+      ) {
+        this.errors.push("Wypełnij pola.");
+      } else {
+        if (
+          this.support.username.trim().length < 8 ||
+          this.support.username.trim().length > 8
+        )
+          this.errors.push("El número de control debe tener 8 números");
+        if (this.support.password.length < 4 || this.support.password.length > 4)
+          this.errors.push("La contraseña debe de ser de 4 caracteres");
+        if (this.support.password !== this.support.passwordConfirmation)
+          this.errors.push("Las contraseñas deben coincidir");
+      }
+      if (!this.errors.length) {
+        Vue.axios
+          .post("/support/register", {
+            username: this.support.username,
+            password: this.support.password,
+            passwordConfirmation: this.support.passwordConfirmation,
+            name: this.support.name,
+            semester: this.support.semester
+          })
+          .then(result => {
+            this.success = true;
+            this.support.username = "";
+            this.support.password = "";
+            this.support.passwordConfirmation = "";
+            this.support.name = "";
+            this.support.semester = 1;
             setTimeout(() => {
               this.success = false;
             }, 1500);

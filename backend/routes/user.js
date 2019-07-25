@@ -13,9 +13,4 @@ Router.post('/register',
     error.checkValidation,
     error.catchAsync(userController.register))
 
-Router.post('/login2',
-    userController.validateLogin,
-    error.checkValidation,
-    error.catchAsync(userController.login))
-
 module.exports = Router

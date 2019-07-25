@@ -13,9 +13,4 @@ Router.post('/register',
     error.checkValidation,
     error.catchAsync(teacherController.register))
 
-Router.post('/login2',
-    teacherController.validateLogin,
-    error.checkValidation,
-    error.catchAsync(teacherController.login))
-
 module.exports = Router
