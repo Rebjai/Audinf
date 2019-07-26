@@ -4,6 +4,8 @@ import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import TecStack from './views/TecStack.vue'
+import Thome from './views/THome.vue'
+import Shome from './views/SHome.vue'
 
 Vue.use(Router)
 
@@ -17,12 +19,12 @@ export default new Router({
     {
       path: '/shome',
       name: 'shome',
-      component: TecStack
+      component: Shome
     },
     {
       path: '/thome',
       name: 'thome',
-      component: TecStack
+      component: Thome
     },
     {
       path: '/login',

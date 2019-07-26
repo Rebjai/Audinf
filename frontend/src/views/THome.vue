@@ -2,7 +2,11 @@
   <div id="home">
     <span>N. control: <span class="username"> {{ username }} </span></span>
     <span>Nombre: <span class="username"> {{ name }} </span></span>
-    
+    <div class="select-group">
+      <select name="group" id="group">
+        <option v-for="group in groups" value="" :key="group.id">{{group.name}}</option>
+      </select>
+    </div>
       <div class="createTask">
         <input type="text" v-model='newTask.name'>
         <button @click="createTask">
@@ -46,6 +50,17 @@ export default {
         name: '',
         term: ''
       },
+      groups:[{id: 1,
+      name: 'IA2'},
+      {id: 2,
+      name: 'IA4'},
+      {id: 3,
+      name: 'IB2'},
+      {id: 4,
+      name: 'IB6'},
+      {id: 5,
+      name: 'AA2'}
+      ],
       errors: [],
       loading: true,
       tasks: []

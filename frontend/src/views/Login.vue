@@ -86,7 +86,7 @@ export default {
           );
           this.username = "";
           this.password = "";
-          this.$router.push({ name: "shome" });
+          this.$router.push({ name: "thome" });
           this.$emit("authenticated", true);
         })
         .catch(error => {
