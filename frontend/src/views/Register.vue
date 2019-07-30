@@ -24,6 +24,9 @@
       <label>Nombre:</label>
       <input type="text" v-model="user.name" />
 
+      <label>Area:</label>
+      <input type="text" v-model="user.area" />
+
       <label>semestre:</label>
       <input type="number" value="1" min="1" max="8" v-model="user.semester" />
 
@@ -179,7 +182,7 @@ export default {
         this.user.password == "" &&
         this.user.passwordConfirmation == ""
       ) {
-        this.errors.push("Wypełnij pola.");
+        this.errors.push("introduce los datos");
       } else {
         if (
           this.user.username.trim().length < 8 ||
@@ -198,7 +201,8 @@ export default {
             password: this.user.password,
             passwordConfirmation: this.user.passwordConfirmation,
             name: this.user.name,
-            semester: this.user.semester
+            semester: this.user.semester,
+            area: this.user.area
           })
           .then(result => {
             this.success = true;
@@ -341,6 +345,8 @@ export default {
             area: this.group.area
           })
           .then(result => {
+            console.log(result);
+            
             this.success = true;
             this.group.name = "";
             this.group.semester = 1;

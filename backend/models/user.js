@@ -5,6 +5,7 @@ const User = mongoose.Schema({
     username: {type: String, required: true},
     password: {type: String, required: true},
     name: String,
+    area: {type:String, required: true},
     semester: Number,
 }, {
     timestamps: true

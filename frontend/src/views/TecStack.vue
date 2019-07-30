@@ -126,13 +126,16 @@ export default {
   methods: {
     getIndex() {},
     getGroups(semester) {
+      
       Vue.axios
-        .get(`group/${semester}`)
+        .post(`group/${semester}`, {
+          test: "test",
+          area: localStorage.getItem("area")
+        })
         .then(result => {
           this.groups = result.data.groups;
           this.loading = false;
           console.log(result.data.groups);
-          
         })
         .catch(error => {
           //todo: zrobisz wyswietlanie errorow
@@ -201,7 +204,7 @@ export default {
   created() {
     this.setUsernameFromToken();
     this.setClientIP();
-    this.getGroups(localStorage.getItem("semester"))
+    this.getGroups(localStorage.getItem("semester"));
 
     //Pobieranie zadan z bazy danych
     Vue.axios

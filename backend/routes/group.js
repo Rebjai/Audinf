@@ -6,7 +6,7 @@ const auth = require('../middlewares/auth')
 Router.get('/',
     auth.verifyToken,
     error.catchAsync(taskController.findAll))
-Router.get('/:semester',
+Router.post('/:semester',
     auth.verifyToken,
     taskController.validateTaskIsExist,
     taskController.validateTask,

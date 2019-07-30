@@ -5,6 +5,8 @@ const { check } = require('express-validator/check')
 
 module.exports = {
     async register(req, res, next) {
+        console.log("regging", req.body);
+        
 
         
 
@@ -37,10 +39,16 @@ module.exports = {
 
     //find all
     async findAll(req, res, next) {
-        const groups = await Group.find({ semester: req.params.semester }).select('name term').sort({'createdAt': -1})
+        
+        const groups = await Group.find({ semester: req.params.semester , area: req.body.area})
+        console.log("grupos",groups);
+        console.log("params",req.params);
+        console.log("body",req.body);
 
+
+        
         return res.status(200).json({
-            message: 'Obecne zadania.',
+            message: 'encontrado',
             groups
         })
 

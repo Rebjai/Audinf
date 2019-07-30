@@ -18,7 +18,8 @@ module.exports = {
                 username: req.body.username,
                 password: encrypted,
                 name: req.body.name,
-                semester: req.body.semester
+                semester: req.body.semester,
+                area:req.body.area
             }).save()
 
 
@@ -62,6 +63,7 @@ module.exports = {
             id: data._id,
             name: data.name,
             semester: data.semester,
+            area:data.area
         })
 
     }

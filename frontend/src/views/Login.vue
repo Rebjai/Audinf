@@ -59,7 +59,7 @@
         <button class="button is-text">Cancel</button>
       </div>-->
     
-    <select name="userType" id="select-user" v-model="userType">
+    <!-- <select name="userType" id="select-user" v-model="userType">
       <option value="0">Estudiante</option>
       <option value="1">Docente</option>
       <option value="2">Soporte</option>
@@ -76,7 +76,7 @@
       <ul>
         <li v-for="(error, index) of errors" :key="index">{{ error }}</li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -122,7 +122,7 @@ export default {
         .post("/user/login", {
           username: this.username,
           password: this.password,
-          deviceIP: localStorage.getItem("IP")
+          deviceIP: localStorage.getItem("IP"),
         })
         .then(result => {
           console.log(result.data);
@@ -131,6 +131,7 @@ export default {
           localStorage.setItem("token", result.data.token);
           localStorage.setItem("username", this.username);
           localStorage.setItem("name", result.data.name);
+          localStorage.setItem("area", result.data.area);
           localStorage.setItem("semester", result.data.semester);
           localStorage.setItem("ID", result.data.id);
           localStorage.setItem("logID", result.data.logID);
