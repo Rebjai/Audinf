@@ -1,5 +1,64 @@
 <template>
-  <div @keyup.enter="login" id="login">
+  <div @keyup.enter="login" id="login" class="container">
+    <div class="box">
+      <div class="field">
+        <label class="label">Soy un:</label>
+        <div class="control">
+          <div class="select">
+            <select name="userType" id="select-user" v-model="userType">
+              <option value="0">Estudiante</option>
+              <option value="1">Docente</option>
+              <option value="2">Soporte</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Número de control:</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" type="text" placeholder="12345678" v-model="username" />
+          <span class="icon is-small is-left">
+            <i class="fas fa-user"></i>
+          </span>
+          <span class="icon is-small is-right">
+            <i class="fas fa-check"></i>
+          </span>
+        </div>
+        <p class="help is-success">This username is available</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Contraseña</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input is-danger"
+            type="password"
+            v-model="password"
+            placeholder="Contraseña"
+            value="password"
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
+          <span class="icon is-small is-right">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+        </div>
+        <p class="help is-danger">This email is invalid</p>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-link" @click="login">Entrar</button>
+        </div>
+      </div>
+    </div>
+    
+      <!-- <div class="control">
+        <button class="button is-text">Cancel</button>
+      </div>-->
+    
     <select name="userType" id="select-user" v-model="userType">
       <option value="0">Estudiante</option>
       <option value="1">Docente</option>
@@ -23,6 +82,7 @@
 
 <script>
 import Vue from "vue";
+import getClientIP from "../utils/getClientIP";
 
 export default {
   data() {
@@ -34,40 +94,60 @@ export default {
     };
   },
   methods: {
+    setClientIP(){
+      console.log("setting ip");
+
+      let self = this;
+      getClientIP(function(ip) {
+        // Usage
+        console.log("Got IP! :" + ip);
+        localStorage.setItem("IP", ip)
+        
+      });
+    },
     login() {
       this.errors = [];
       if (this.username == "" || this.password == "") {
         this.errors.push("Ingresa tus datos, por favor");
-      }else{
-      this.userType == 0 ? this.logUser() : this.userType == 1 ? this.logTeacher() : this.logSupport()
-
+      } else {
+        this.userType == 0
+          ? this.logUser()
+          : this.userType == 1
+          ? this.logTeacher()
+          : this.logSupport();
       }
     },
     logUser() {
       Vue.axios
         .post("/user/login", {
           username: this.username,
-          password: this.password
+          password: this.password,
+          deviceIP: localStorage.getItem("IP")
         })
         .then(result => {
           console.log(result.data);
+          
 
           localStorage.setItem("token", result.data.token);
           localStorage.setItem("username", this.username);
           localStorage.setItem("name", result.data.name);
           localStorage.setItem("semester", result.data.semester);
+          localStorage.setItem("ID", result.data.id);
+          localStorage.setItem("logID", result.data.logID);
           Vue.axios.defaults.headers.Authorization = localStorage.getItem(
             "token"
           );
           this.username = "";
           this.password = "";
-          this.$router.push({ name: "thome" });
+          this.$router.push({ name: "home" });
           this.$emit("authenticated", true);
         })
         .catch(error => {
           this.errors = error.response.data.errors;
         });
+        this.setClientIP()
     },
+    
     logTeacher() {
       Vue.axios
         .post("/teacher/login", {
@@ -111,7 +191,7 @@ export default {
           );
           this.username = "";
           this.password = "";
-          this.$router.push({ name: "home" });
+          this.$router.push({ name: "shome" });
           this.$emit("authenticated", true);
         })
         .catch(error => {
@@ -123,48 +203,4 @@ export default {
 </script>
 
 <style>
-#login {
-  display: grid;
-  background-color: #222;
-  border-radius: 5px;
-  grid-gap: 5px;
-  padding: 10px;
-  margin: 5px;
-}
-#login > input,
-button {
-  border: solid #e7e7e7 1px;
-  background: transparent;
-  border-radius: 10rem;
-  outline: none;
-}
-#login > input {
-  font-size: 1.25em;
-  padding: 5px 0 5px 10px;
-}
-#login > button {
-  text-align: center;
-  margin-top: 10px;
-  width: auto;
-  padding: 0.45em 0.75em;
-  font-size: 1.05em;
-  justify-self: right;
-}
-#login ul {
-  list-style-type: none;
-  padding: 10px;
-  margin: 0;
-}
-#login ul li {
-  margin-top: 15px;
-}
-#login ul li:first-child {
-  margin-top: 0;
-}
-
-@media screen and (min-width: 800px) {
-  #login {
-    width: 400px;
-  }
-}
 </style>

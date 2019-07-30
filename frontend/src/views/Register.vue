@@ -7,6 +7,8 @@
       <option value="teacher">Docente</option>
       <option value="device">Equipo</option>
       <option value="support">Soporte</option>
+      <option value="group">Grupo</option>
+      <option value="support"></option>
     </select>
     <!-- estudiante -->
     <div v-show="userType == 'student'" @keyup.enter="register" id="register-student">
@@ -59,9 +61,9 @@
     <!-- equipo -->
     <div v-show="userType == 'device'" id="register-device">
       Equipo:
-      <br>
+      <br />
       <label>I.P. del equipo:</label>
-      <input type="text" v-model="device.ip" @click.prevent="setClientIP" @keydown.prevent=""  />
+      <input type="text" v-model="device.ip" @click.prevent="setClientIP" @keydown.prevent />
 
       <label>nombre:</label>
       <input type="name" v-model="device.name" />
@@ -77,6 +79,44 @@
       </div>
     </div>
     <!-- mantenimiento -->
+    <div v-show="userType == 'support'" id="register-device">
+      Support:
+      <br />
+      <label>Nombre:</label>
+      <input type="text" v-model="support.name" @click.prevent="setClientIP" @keydown.prevent />
+
+      <label>Contraseña:</label>
+      <input type="text" v-model="support.password" />
+
+      <label>id:</label>
+      <input type="text" v-model="support.ID" />
+      <button @click="registerSupport">Registrarse</button>
+      <div class="errors">
+        <ul>
+          <li v-for="(error, index) of errors" :key="index">{{ error }}</li>
+        </ul>
+        <span v-if="success">Registro Exitoso</span>
+      </div>
+    </div>
+    <div v-show="userType == 'group'" id="register-group">
+      group:
+      <br />
+      <label>Nombre:</label>
+      <input type="text" v-model="group.name" />
+
+      <label>semestre:</label>
+      <input type="number" v-model="group.semester" />
+
+      <label>area:</label>
+      <input type="text" v-model="group.area" />
+      <button @click="registerGroup">Registrarse</button>
+      <div class="errors">
+        <ul>
+          <li v-for="(error, index) of errors" :key="index">{{ error }}</li>
+        </ul>
+        <span v-if="success">Registro Exitoso</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -107,13 +147,23 @@ export default {
         ip: "",
         name: "",
         room: ""
+      },
+      support: {
+        password: "",
+        name: "",
+        ID: ""
+      },
+      group: {
+        semester: 1,
+        name: "",
+        ID: ""
       }
     };
   },
   methods: {
     setClientIP() {
-        console.log("getting ip");
-        
+      console.log("getting ip");
+
       let self = this;
       getUserIP(function(ip) {
         // Usage
@@ -181,7 +231,10 @@ export default {
           this.teacher.username.trim().length > 8
         )
           this.errors.push("El número de control debe tener 8 números");
-        if (this.teacher.password.length < 4 || this.teacher.password.length > 4)
+        if (
+          this.teacher.password.length < 4 ||
+          this.teacher.password.length > 4
+        )
           this.errors.push("La contraseña debe de ser de 4 caracteres");
         if (this.teacher.password !== this.teacher.passwordConfirmation)
           this.errors.push("Las contraseñas deben coincidir");
@@ -201,7 +254,7 @@ export default {
             this.teacher.passwordConfirmation = "";
             this.teacher.name = "";
             setTimeout(() => {
-              this.success = false;   
+              this.success = false;
             }, 1500);
           })
           .catch(error => {
@@ -224,7 +277,10 @@ export default {
           this.support.username.trim().length > 8
         )
           this.errors.push("El número de control debe tener 8 números");
-        if (this.support.password.length < 4 || this.support.password.length > 4)
+        if (
+          this.support.password.length < 4 ||
+          this.support.password.length > 4
+        )
           this.errors.push("La contraseña debe de ser de 4 caracteres");
         if (this.support.password !== this.support.passwordConfirmation)
           this.errors.push("Las contraseñas deben coincidir");
@@ -253,13 +309,57 @@ export default {
             this.errors = error.response.data.errors;
           });
       }
+    },
+    registerGroup() {
+      this.errors = [];
+      this.success = false;
+      if (
+        this.group.name == "" &&
+        this.group.semester == "" &&
+        this.group.area == ""
+      ) {
+        this.errors.push("Rellena Los campos");
+      } else {
+        if (
+          this.group.name.trim().length < 1 ||
+          this.group.name.trim().length > 4
+        )
+          this.errors.push("El nombre del grupo debe tener entre 1 y 4 caracteres");
+        if (
+          this.group.semester < 1 ||
+          this.group.semester > 10
+        )
+          {this.errors.push("el semestre debe ser mayo de 1 y menor de 10")}
+        if (this.group.area == "")
+          this.errors.push("ingresa area");
+      }
+      if (!this.errors.length) {
+        Vue.axios
+          .post("/group/register", {
+            name: this.group.name.toUpperCase(),
+            semester: this.group.semester,
+            area: this.group.area
+          })
+          .then(result => {
+            this.success = true;
+            this.group.name = "";
+            this.group.semester = 1;
+            this.group.area = "";
+            setTimeout(() => {
+              this.success = false;
+            }, 1500);
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          });
+      }
     }
   }
 };
 </script>
 
 <style>
-#register {
+/* #register {
   display: grid;
   background-color: #222;
   border-radius: 5px;
@@ -321,5 +421,5 @@ select > option {
   #register {
     width: 400px;
   }
-}
+} */
 </style>

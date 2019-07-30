@@ -109,7 +109,7 @@ export default {
 </script>
 
 <style>
-  #home {
+  /* #home {
     display: grid;
     background-color: #222;
     border-radius: 5px;
@@ -203,5 +203,5 @@ export default {
       grid-column: 1 / -1;
       grid-row: 2 / 3;
     }
-  }
+  } */
 </style>

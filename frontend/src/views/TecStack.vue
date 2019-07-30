@@ -1,21 +1,42 @@
 <template>
-  <div id="home">
-    <span>
-      IP del equipo:
-      <span class="username">{{ ip }}</span>
-    </span>
-    <span>
-      N. control:
-      <span class="username">{{ username }}</span>
-    </span>
-    <span>
-      Nombre:
-      <span class="username">{{ name }}</span>
-    </span>
-    <span>
-      semestre:
-      <span class="username">{{ semester }}</span>
-    </span>
+  <div id="home" class="container has-text-centered">
+    <div class="columns is-multiline">
+      <div class="column is-12">
+        <span>
+          IP del equipo:
+          <span class="username">{{ ip }}</span>
+        </span>
+      </div>
+      <div class="column">
+        <span>
+          semestre:
+          <span class="username">{{ semester }}</span>
+        </span>
+      </div>
+      <div class="column">
+        <span>
+          Nombre:
+          <span class="username">{{ name }}</span>
+        </span>
+      </div>
+      <div class="column">
+        <span>
+          N. control:
+          <span class="username">{{ username }}</span>
+        </span>
+      </div>
+
+      <!-- <div class="column"></div>
+      <div class="column"></div>-->
+    </div>
+    <div class="techstack">
+      <div class="select-group">
+        <span>Por favor selecciona tu grupo</span>
+        <select name="group" id="group">
+          <option value="yeah">yeah</option>
+        </select>
+      </div>
+    </div>
 
     <div class="createStack">
       <!-- checkbox -->
@@ -81,6 +102,7 @@ export default {
       other: "",
       ip: "0.0.0.0",
       selected: [],
+      groups: [],
       stackOptions: [
         {
           category: "ofimática",
@@ -102,6 +124,20 @@ export default {
     };
   },
   methods: {
+    getIndex() {},
+    getGroups(semester) {
+      Vue.axios
+        .get(`group/${semester}`)
+        .then(result => {
+          this.groups = result.data.groups;
+          this.loading = false;
+          console.log(result.data.groups);
+          
+        })
+        .catch(error => {
+          //todo: zrobisz wyswietlanie errorow
+        });
+    },
     popFromStack(tec) {
       alert(tec);
     },
@@ -153,7 +189,7 @@ export default {
     },
     setClientIP() {
       console.log("setting ip");
-      
+
       let self = this;
       getUserIP(function(ip) {
         // Usage
@@ -165,6 +201,7 @@ export default {
   created() {
     this.setUsernameFromToken();
     this.setClientIP();
+    this.getGroups(localStorage.getItem("semester"))
 
     //Pobieranie zadan z bazy danych
     Vue.axios
@@ -181,7 +218,7 @@ export default {
 </script>
 
 <style>
-#home {
+/* #home {
   display: grid;
   background-color: #222;
   border-radius: 5px;
@@ -286,6 +323,6 @@ ul li {
     padding: 0.5rem;
     border: 2px solid #e7e7e7;
     border-radius: 15px;
-  }
-}
+  } */
+/* } */
 </style>

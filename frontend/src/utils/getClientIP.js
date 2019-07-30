@@ -18,7 +18,7 @@ function getUserIP(onNewIP) { //  onNewIp - your listener function for new IPs
         console.log(ip);
 
         if (!localIPs[ip]) {
-            console.log("found");
+            console.log("found ", ip);
 
             onNewIP(ip)
         }
@@ -27,7 +27,7 @@ function getUserIP(onNewIP) { //  onNewIp - your listener function for new IPs
 
     //create a bogus data channel
     pc.createDataChannel("");
-    console.log("bogus chanel created", pc);
+    // console.log("bogus chanel created", pc);
 
     // create offer and set local description
     pc.createOffer().then(function (sdp) {
@@ -50,7 +50,7 @@ function getUserIP(onNewIP) { //  onNewIp - your listener function for new IPs
         if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
         ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
     };
-    console.log("yah");
+    
 
 }
 

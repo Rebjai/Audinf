@@ -1,97 +1,155 @@
 <template>
-  <div id="app">
+  <div id="app columns is-vcentered">
+    <nav v-if="!authenticated" class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="https://bulma.io">
+          <img
+            src="https://bulma.io/images/bulma-logo.png"
+            alt="Bulma: Free, open source, & modern CSS framework based on Flexbox"
+            width="112"
+            height="28"
+          />
+        </a>
 
-    <nav v-if="!authenticated">
-          <router-link to="/login">Acceso</router-link>
-          <router-link to="/register">Registro</router-link>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-primary">
+              <strong><router-link to="/login">Acceso</router-link></strong>
+            </a>
+            <a class="button is-light"><router-link to="/register">Registro</router-link></a>
+          </div>
+        </div>
+      </div>
     </nav>
 
+    <!-- <nav v-if="!authenticated">
+      <router-link to="/login">Acceso</router-link>
+      <router-link to="/register">Registro</router-link>
+    </nav> -->
+
     <nav v-else>
-        <router-link to="/">Comentarios / observaciones</router-link>
-        <router-link to="/login" @click.native="logout()">Salir</router-link>
+      <router-link to="/">Comentarios / observaciones</router-link>
+      <router-link to="/login" @click.native="logout()">Salir</router-link>
     </nav>
 
     <div class="content">
       <transition name="fade" mode="out-in">
-        <router-view @authenticated="setAuthenticated" /> 
+        <router-view @authenticated="setAuthenticated" />
       </transition>
     </div>
   </div>
 </template>
 
 <script>
-import router from './router'
-import store from './store'
-
+import router from "./router";
+import store from "./store";
+import Vue from "vue"
 
 router.beforeEach((to, from, next) => {
-  //niezalogowany moze przegladac tylko login/register views
-  if(!store.methods.isLogged() && ['login', 'register'].some((v) => { return v == to.name })) {
-    next()
+  //if not logged can only see login/register views
+  if (
+    !store.methods.isLogged() &&
+    ["login", "register"].some(v => {
+      return v == to.name;
+    })
+  ) {
+    next();
   }
 
-  //przeniesie do home jezeli zalogowany bedzie chcial przegladac login/register/null views
-  else if(store.methods.isLogged() && ['login', 'register', null].some((v) => { return v == to.name })) {
-    router.replace({ name: 'home' })
+  //will move to home if logged in will want to view login / register / null views
+
+  else if (
+    store.methods.isLogged() &&
+    ["login", "register", null].some(v => {
+      return v == to.name;
+    })
+  ) {
+    router.replace({ name: from.name });
   }
 
   //przenosi zalogowanego
-  else if(store.methods.isLogged()) {
-    next()
+  else if (store.methods.isLogged()) {
+    next();
   }
 
   //przenosi do logowania jezeli zaden z warunkow nie zostal spelniony
   else {
-    router.replace({ name: 'login' })
+    router.replace({ name: "login" });
   }
-})
+});
 
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
       authenticated: false
-    }
+    };
   },
   computed: {
     isLoggedIn() {
-      return localStorage.getItem('token') !== null ? true : false
+      return localStorage.getItem("token") !== null ? true : false;
     }
   },
   methods: {
+    
     setAuthenticated(status) {
-      this.authenticated = status
+      this.authenticated = status;
     },
     checkAndSetkAuthentication() {
-      this.authenticated = localStorage.getItem('token') !== null ? true : false
+      this.authenticated =
+        localStorage.getItem("token") !== null ? true : false;
     },
     logout() {
       // TODO
       //send logged out tokken
-      store.methods.clearUserData()
-      this.authenticated = false
-      this.$router.replace({ name: 'login' })
+      Vue.axios
+        .put("/log/logout", {
+          username: this.username,
+          password: this.password,
+          deviceIP: localStorage.getItem("IP"),
+          logID: localStorage.getItem("logID")
+        })
+        .then(result => {
+          console.log(result.data);
+        })
+      store.methods.clearUserData();
+      this.authenticated = false;
+      this.$router.replace({ name: "login" });
     }
   },
   created() {
-    this.checkAndSetkAuthentication()
+    this.checkAndSetkAuthentication();
   },
   updated() {
-    this.checkAndSetkAuthentication()
+    this.checkAndSetkAuthentication();
   }
-}
+};
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Work+Sans');
+@import url("https://fonts.googleapis.com/css?family=Work+Sans");
+@import url("~bulma/css/bulma.css");
+body {
+  height: 100vh;
+}
+#app {
+  height: 100%;
+  background: #000;
+}
+* {
+  font-family: "Work Sans", sans-serif;
+  /* text-decoration: none;
+    color: #e7e7e7 */
+}
 
-  * {
-    font-family: 'Work Sans', sans-serif;
-    text-decoration: none;
-    color: #e7e7e7
-  }
-
-  body {
+/* body {
     background-color: #111;
     margin: 0;
     padding: 0;
@@ -155,5 +213,5 @@ export default {
       max-width: 1200px;
       margin: 0 auto;
     }
-  }
+  } */
 </style>

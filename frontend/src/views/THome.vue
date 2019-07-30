@@ -1,5 +1,5 @@
 <template>
-  <div id="home">
+  <div id="home" class="container">
     <span>N. control: <span class="username"> {{ username }} </span></span>
     <span>Nombre: <span class="username"> {{ name }} </span></span>
     <div class="select-group">
@@ -124,7 +124,7 @@ export default {
 </script>
 
 <style>
-  #home {
+  /* #home {
     display: grid;
     background-color: #222;
     border-radius: 5px;
@@ -218,5 +218,5 @@ export default {
       grid-column: 1 / -1;
       grid-row: 2 / 3;
     }
-  }
+  } */
 </style>
