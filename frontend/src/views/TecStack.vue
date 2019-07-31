@@ -29,37 +29,81 @@
       <!-- <div class="column"></div>
       <div class="column"></div>-->
     </div>
-    <div class="techstack">
-      <div class="select-group">
-        <span>Por favor selecciona tu grupo</span>
-        <select name="group" id="group">
-          <option value="yeah">yeah</option>
-        </select>
+    <div class>
+      <div class>
+        <label for>Ingresa tu grupo:</label>
+        <div class="select is-info">
+          <select v-model="log.group">
+            <option v-for="grp in groups" :key="grp.id" :value="grp.name">{{grp.name}}</option>
+          </select>
+        </div>
       </div>
     </div>
+    <div class>
+      <div class>
+        <label for>Selecciona tu profesor:</label>
+        <div class="select is-info">
+          <select v-model="log.teacher">
+            <option v-for="tchr in teachers" :key="tchr.id" :value="tchr.name">{{tchr.name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="techstack field">
+      <div class="control">
+        <div class="select select-group">
+          <select name="group" id="group">
+            <option v-for="grp in groups" :key="grp.id" :value="grp.name">{{grp.name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>-->
 
-    <div class="createStack">
+    <div class="createStack container box">
       <!-- checkbox -->
-      <span>selecciona los programas que vayas a utilizar</span>
-      <div class="category" v-for="opt in stackOptions" :key="opt.category">
+      <div class="message-header has-background-link">
+        <p>Selecciona los programas a utilizar</p>
+      </div>
+      <article class="message category" v-for="opt in stackOptions" :key="opt.category">
+        <div class="message-header">
+          <p>{{opt.category}}</p>
+          <!-- <button class="delete" aria-label="delete"></button> -->
+        </div>
+        <div class="message-body">
+          <div class="tec" v-for="tec in opt.programs" :key="tec">
+            <input type="checkbox" :id="'checkbox'+tec" :value="tec" v-model="selected" />
+            <label :for="'checkbox'+tec">{{ tec }}</label>
+          </div>
+        </div>
+      </article>
+      <!-- <div class="category" v-for="opt in stackOptions" :key="opt.category">
         <span>{{opt.category}}</span>
         <div class="tec" v-for="tec in opt.programs" :key="tec">
           <input type="checkbox" :id="'checkbox'+tec" :value="tec" v-model="selected" />
           <label :for="'checkbox'+tec">{{ tec }}</label>
         </div>
-      </div>
+      </div>-->
       <div class="other tec">
         <input type="checkbox" name="checkbox-other" id="option-other" v-model="isOther" />
         <label for="option-other">otro</label>
         <input v-if="isOther" type="text" name id v-model="other" @keypress.enter="pushToStack" />
       </div>
       <div class="selected">selected: {{selected}}</div>
+
       <div v-for="tec in selected" :key="tec" class="stack-item" @click="popFromStack(tec)">
         <span>{{tec}}</span>
       </div>
-      <!-- end checkbox -->
 
-      <div class="createTask">
+      <!-- end checkbox -->
+      <div class="field">
+        <label for="comment">comentarios/observaciones:</label>
+        <div class="control">
+          <textarea class="textarea is-primary" placeholder="Primary textarea" v-model="log.comment" name="comment"></textarea>
+        </div>
+      </div>
+      <a class="button is-link" @click="updateLog">Enviar</a>
+
+      <!-- <div class="createTask">
         <input type="text" v-model="newTask.name" />
         <button @click="createTask">
           <i class="fas fa-plus"></i>
@@ -79,7 +123,7 @@
           :task="task"
           @deleteTask="deleteTask($event)"
         ></task-component>
-      </transition-group>
+      </transition-group>-->
     </div>
   </div>
 </template>
@@ -88,6 +132,7 @@
 import Vue from "vue";
 import TaskComponent from "../components/Task.vue";
 import getUserIP from "../utils/getClientIP";
+import router from '../router';
 
 export default {
   components: {
@@ -103,6 +148,13 @@ export default {
       ip: "0.0.0.0",
       selected: [],
       groups: [],
+      teachers: [],
+      log:{
+        comment:"",
+        group: "",
+        stack: [],
+        teacher: ""
+      },
       stackOptions: [
         {
           category: "ofimática",
@@ -125,24 +177,77 @@ export default {
   },
   methods: {
     getIndex() {},
-    getGroups(semester) {
+    updateLog() {
+      let area = localStorage.getItem("logID");
+      console.log("area", area);
+      if (this.selected.length > 0 && this.log.teacher !== "" && this.log.group !== "") {
+        Vue.axios
+        .put(`log/${area}`, {
+          comment: this.log.comment,
+          stack: this.selected,
+          group: this.log.group,
+          teacher: this.log.teacher
+        })
+        .then(result => {
+          this.loading = false;
+          this.log.comment = ""
+          this.log.group = ""
+          this.selected = []
+          
+          console.log("result", result);
+          router.push({name: 'continue'})
+        })
+        .catch(error => {
+          console.log(error);
+
+          //todo: zrobisz wyswietlanie errorow
+        });
+      }
+      else{
+        console.log("llena los datos");
+        
+      }
+
       
+    },
+    getTeachers() {
+      Vue.axios
+        .get(`teacher/`)
+        .then(result => {
+          this.teachers = result.data.teachers;
+          this.loading = false;
+          console.log("teacher", result.data.teachers);
+        })
+        .catch(error => {
+          console.log(error);
+
+          //todo: zrobisz wyswietlanie errorow
+        });
+    },
+    getGroups(semester) {
+      let area = localStorage.getItem("area");
+      console.log("sem", semester);
+
       Vue.axios
         .post(`group/${semester}`, {
           test: "test",
-          area: localStorage.getItem("area")
+          area: area
         })
         .then(result => {
           this.groups = result.data.groups;
           this.loading = false;
-          console.log(result.data.groups);
+          console.log("groups", result.data.groups);
         })
         .catch(error => {
+          console.log(error);
+
           //todo: zrobisz wyswietlanie errorow
         });
     },
     popFromStack(tec) {
-      alert(tec);
+      let index = this.selected.findIndex(val => val == tec);
+      this.selected.splice(index, 1);
+      console.log(tec, index);
     },
     pushToStack() {
       this.selected.push(this.other);
@@ -204,6 +309,7 @@ export default {
   created() {
     this.setUsernameFromToken();
     this.setClientIP();
+    this.getTeachers();
     this.getGroups(localStorage.getItem("semester"));
 
     //Pobieranie zadan z bazy danych

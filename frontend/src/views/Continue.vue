@@ -1,57 +1,19 @@
 <template>
-  <div id="home" class="container">
-    <div class="columns is-multiline">
-      <div class="column">
-        <span>
-          IP del equipo:
-          <span class="username">{{ ip }}</span>
-        </span>
-      </div>
-      <!-- <div class="column">
-        <span>
-          semestre:
-          <span class="username">{{ semester }}</span>
-        </span>
-      </div>-->
-      <div class="column">
-        <span>
-          Nombre:
-          <span class="username">{{ name }}</span>
-        </span>
-      </div>
-      <div class="column">
+  <div id="home">
+    <div class="container">
+      <div class="notification is-primary">
+        <button class="delete"></button>
         <span>
           N. control:
           <span class="username">{{ username }}</span>
         </span>
-      </div>
-
-      <!-- <div class="column"></div>
-      <div class="column"></div>-->
-    </div>
-    <div class="container has-text-centered">
-      <div class="box">
-        <div class>
-          <div class>
-            <label for>Ingrese el grupo:</label>
-            <div class="select is-info">
-              <select v-model="log.group">
-                <option v-for="grp in groups" :key="grp.id" :value="grp.name">{{grp.name}}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class>
-          <div class>
-            <label for>seleccione la materia</label>
-            <div class="select is-info">
-              <select v-model="log.teacher">
-                <option v-for="tchr in teachers" :key="tchr.id" :value="tchr.name">{{tchr.name}}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <a class="button is-link" @click="goContinue">Enviar</a>
+        <span>
+          Nombre:
+          <span class="username">{{ name }}</span>
+        </span>
+        <br>
+        <strong>Gracias por su registro.
+        puede continuar con sus actividades</strong>
       </div>
     </div>
   </div>
@@ -60,7 +22,6 @@
 <script>
 import Vue from "vue";
 import TaskComponent from "../components/Task.vue";
-import router from '../router';
 
 export default {
   components: {
@@ -68,28 +29,11 @@ export default {
   },
   data() {
     return {
-      ip: localStorage.getItem("ip"),
       username: "",
       name: "",
       newTask: {
         name: "",
         term: ""
-      },
-      groups: [
-        { id: 1, name: "IA2" },
-        { id: 2, name: "IA4" },
-        { id: 3, name: "IB2" },
-        { id: 4, name: "IB6" },
-        { id: 5, name: "AA2" }
-      ],
-      // groups: [],
-      teachers: [{name:"cálculo"}
-      , {name:"redes"}, {name:"sistemas operativos"}, {name:"telecom"}],
-      log: {
-        comment: "",
-        group: "",
-        stack: [],
-        teacher: ""
       },
       errors: [],
       loading: true,
@@ -97,24 +41,6 @@ export default {
     };
   },
   methods: {
-    goContinue(){
-      router.push({name: 'continue'})
-    },
-    getGroups(){
-      Vue.axios
-        .get(`group/`)
-        .then(result => {
-          this.groups = result.data.groups;
-          this.loading = false;
-          console.log("groups", result.data.groups);
-        })
-        .catch(error => {
-          console.log(error);
-
-          //todo: zrobisz wyswietlanie errorow
-        });
-    },
-
     deleteTask(id) {
       this.tasks.filter((v, i) => {
         if (v._id == id) {
@@ -158,7 +84,6 @@ export default {
     }
   },
   created() {
-    this.getGroups()
     this.setUsernameFromToken(),
       //Pobieranie zadan z bazy danych
       Vue.axios

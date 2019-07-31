@@ -7,6 +7,8 @@ Router.post('/login',
     teacherController.validateLogin,
     error.checkValidation,
     error.catchAsync(teacherController.login))
+Router.get('/',
+    teacherController.findAll)
 
 Router.post('/register',
     teacherController.validateRegister,

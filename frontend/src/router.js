@@ -6,6 +6,7 @@ import Register from './views/Register.vue'
 import TecStack from './views/TecStack.vue'
 import Thome from './views/THome.vue'
 import Shome from './views/SHome.vue'
+import Continue from './views/Continue.vue'
 
 Vue.use(Router)
 
@@ -40,6 +41,12 @@ export default new Router({
       path: '/stack',
       name: 'tec-stack',
       component: TecStack
+    },
+    {
+      path: '/continue',
+      name: 'continue',
+      component: Continue
     }
+
   ]
 })

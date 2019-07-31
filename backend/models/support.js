@@ -5,6 +5,7 @@ const support = mongoose.Schema({
     username: {type: String, required: true },
     password: {type: String, required: true },
     name: String,
+    area: String
 }, {
     timestamps: true
 })

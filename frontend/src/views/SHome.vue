@@ -1,32 +1,66 @@
 <template>
-  <div id="home">
-    <span>N. control: <span class="username"> {{ username }} </span></span>
-    <span>Nombre: <span class="username"> {{ name }} </span></span>
-    
-      <div class="createTask">
-        <input type="text" v-model='newTask.name'>
-        <button @click="createTask">
-          <i class="fas fa-plus"></i>
-        </button>
-        <div class="createTaskDate">
-          <input type="date" v-model='newTask.term'>
-        </div>
-        <ul class="createTaskErrors">
-          <li
-          v-for="(error, index) of errors"
-          :key="index"
-          > {{ error }} </li>
-        </ul>
+  <div id="home" class="container">
+    <div class="columns is-multiline">
+      <div class="column">
+        <span>
+          IP del equipo:
+          <span class="username">{{ ip }}</span>
+        </span>
       </div>
-      <span v-if="loading"> Espera un momento... </span>
-      <transition-group name="fadeTask" tag="div" class="task-list">
-        <task-component
-        v-for="task of tasks"
-        :key="task._id"
-        :task="task"
-        @deleteTask="deleteTask($event)"
-        ></task-component>
-      </transition-group>
+      <!-- <div class="column">
+        <span>
+          semestre:
+          <span class="username">{{ semester }}</span>
+        </span>
+      </div>-->
+      <div class="column">
+        <span>
+          Nombre:
+          <span class="username">{{ name }}</span>
+        </span>
+      </div>
+      <div class="column">
+        <span>
+          N. control:
+          <span class="username">{{ username }}</span>
+        </span>
+      </div>
+
+      <!-- <div class="column"></div>
+      <div class="column"></div>-->
+    </div>
+    <div class="container has-text-centered">
+      <div v-for="log in logs" :key ="log.id" class="box">
+        <div class="columns">
+          <div class="column">{{log.createdAt}}</div>
+          <div class="column">{{log.endDate}}</div>
+          <div class="column">{{log.stack}}</div>
+          <div class="column">{{log.username}}</div>
+        </div>
+        {{log.id}}
+        <!-- <div class>
+          <div class>
+            <label for>Ingrese el grupo:</label>
+            <div class="select is-info">
+              <select v-model="log.group">
+                <option v-for="grp in groups" :key="grp.id" :value="grp.name">{{grp.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class>
+          <div class>
+            <label for>seleccione la materia</label>
+            <div class="select is-info">
+              <select v-model="log.teacher">
+                <option v-for="tchr in teachers" :key="tchr.id" :value="tchr.name">{{tchr.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div> -->
+        <!-- <a class="button is-link" @click="goContinue">Enviar</a> -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -40,8 +74,10 @@ export default {
   },
   data() {
     return {
+      ip:"0.0.0.0",
       username: '',
       name: '',
+      logs: [],
       newTask: {
         name: '',
         term: ''
@@ -52,6 +88,20 @@ export default {
     }
   },
   methods: {
+    getLogs(){
+      Vue.axios
+        .get(`log/`)
+        .then(result => {
+          this.logs = result.data.logs;
+          this.loading = false;
+          console.log("logs", result.data.logs);
+        })
+        .catch(error => {
+          console.log(error);
+
+          //todo: zrobisz wyswietlanie errorow
+        });
+    },
     deleteTask(id) {
       this.tasks.filter((v,i) => { if(v._id==id) {
         Vue.axios.delete(`task/${id}`)
@@ -94,6 +144,7 @@ export default {
     }
   },
   created() {
+    this.getLogs()
     this.setUsernameFromToken(),
     //Pobieranie zadan z bazy danych
     Vue.axios.get('/task')
@@ -109,99 +160,5 @@ export default {
 </script>
 
 <style>
-  /* #home {
-    display: grid;
-    background-color: #222;
-    border-radius: 5px;
-    grid-gap: 5px;
-    padding: 10px;
-    margin: 5px;
-  }
-  #home > h1{
-    text-align: center;
-  }
-  .createTaskErrors {
-    grid-column: 1 / -1;
-  }
-  .createTask{
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-  }
-  .createTaskDate {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-  }
-  .createTask > button, .createTask > input, .createTaskDate > input {
-    outline: none;
-    background-color: transparent;
-    border: solid #e7e7e7 1px;
-  }
-  .createTask > button {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    font-size: 1.25em;
-    border-radius: 100%;
-    width: 1.75em;
-    height: 1.75em;
-  }
-  .createTask > input, .createTaskDate > input {
-    padding-left: 10px;
-    font-size: 1.10em;
-    padding: 5px 10px 5px 10px;
-    border-radius: 10rem;
-  }
-  .createTaskDate > input {
-    font-size: .9em;
-  }
-  .username {
-    background-color: #333;
-    padding: 2px;
-    border-radius: 5px;
-  }
-  ul {
-    list-style-type: none;
-    padding: 10px;
-    margin: 0;
-  }
-  ul li {
-    color: red;
-  }
-  .task-list {
-    overflow: hidden;
-  }
-
-  .fadeTask-enter-active, .fadeTask-leave-active {
-    transition: all .5s
-  }
-  .fadeTask-enter, .fadeTask-leave-to {
-    opacity: 0;
-    transform: rotateX(90deg)
-  }
-
-  @media screen and (min-width: 810px) {
-    .createTask {
-      grid-template-columns: 1fr 1fr auto;
-    }
-    .createTask > input[type=text] {
-      grid-column: 1 / 2;
-      grid-row: 1 / 2;
-    }
-    .createTask > .createTaskDate {
-      grid-column: 2 / 3;
-      grid-row: 1 / 2;
-    }
-    .createTask > button {
-      grid-column: 3 / 4;
-      grid-row: 1 / 2;
-    }
-    .createTaskErrors {
-      grid-column: 1 / -1;
-      grid-row: 2 / 3;
-    }
-  } */
+  
 </style>

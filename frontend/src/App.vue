@@ -1,13 +1,13 @@
 <template>
   <div id="app columns is-vcentered">
-    <nav v-if="!authenticated" class="navbar" role="navigation" aria-label="main navigation">
+    <nav v-if="!authenticated" class="navbar is-info " role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
-          <img
-            src="https://bulma.io/images/bulma-logo.png"
-            alt="Bulma: Free, open source, & modern CSS framework based on Flexbox"
-            width="112"
-            height="28"
+        <a class="navbar-item" href="http://www.voaxaca.tecnm.mx/">
+          <img class="navbar-logo"
+            src="./img/LOGO_ITVO.png"
+            alt="Registro de computadoras, ITVO"
+            width="100"
+            height="100"
           />
         </a>
 
@@ -18,12 +18,12 @@
         </a>
       </div>
       <div class="navbar-end">
-        <div class="navbar-item">
+        <div class="navbar-item ">
           <div class="buttons">
-            <a class="button is-primary">
+            <a class="has-text-white button is-light ">
               <strong><router-link to="/login">Acceso</router-link></strong>
             </a>
-            <a class="button is-light"><router-link to="/register">Registro</router-link></a>
+            <a class="button is-info"><router-link to="/register">Registro</router-link></a>
           </div>
         </div>
       </div>
@@ -34,9 +34,35 @@
       <router-link to="/register">Registro</router-link>
     </nav> -->
 
-    <nav v-else>
-      <router-link to="/">Comentarios / observaciones</router-link>
-      <router-link to="/login" @click.native="logout()">Salir</router-link>
+    
+    <nav v-else class="navbar is-info " role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="http://www.voaxaca.tecnm.mx/">
+          <img class="navbar-logo"
+            src="./img/LOGO_ITVO.png"
+            alt="Registro de computadoras, ITVO"
+            width="100"
+            height="100"
+          />
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item ">
+          <div class="buttons">
+            <a class="has-text-white button is-light ">
+              <strong> <router-link to="/home">Comentarios / observaciones</router-link>
+      </strong>
+            </a>
+            <a class="button is-info"><router-link to="/login" @click.native="logout()">Salir</router-link></a>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <div class="content">
@@ -133,7 +159,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import url("https://fonts.googleapis.com/css?family=Work+Sans");
 @import url("~bulma/css/bulma.css");
 body {
@@ -147,6 +173,9 @@ body {
   font-family: "Work Sans", sans-serif;
   /* text-decoration: none;
     color: #e7e7e7 */
+}
+.navbar-logo{
+  max-height: 7em;
 }
 
 /* body {

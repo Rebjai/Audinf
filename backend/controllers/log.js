@@ -8,6 +8,45 @@ const { JWT_SECRET } = require('../constants.json')
 
 
 module.exports = {
+    async findAll(req, res, next){
+        // const groups = await Teacher.find({ semester: req.params.id , area: req.body.area})
+        const logs = await Log.find()
+        return res.status(200).json({
+            message: 'encontrado',
+            logs
+        })
+
+    },
+    async update(req, res, next) {
+        console.log("searching:", req.params);
+        
+        const log = await Log.findOne({ _id: req.params.id })
+
+        if (req.body.stack) {
+            log.stack = req.body.stack
+            console.log("updated stack");
+            
+            
+        }
+        if (req.body.group) {
+            log.group = req.body.group
+            console.log("updated group");
+        }
+        if (req.body.teacher ){
+            log.teacher = req.body.teacher
+            console.log("updated teacher");
+        }
+        if (req.body.comments) {
+            log.comments = req.body.comments
+            console.log("updated comments");
+        }
+
+        await log.save()
+
+        return res.status(200).json({
+            message: 'Updated log.'
+        })
+    },
     async makeReport(req, res, next) {
         console.log("making report", req.body);
         // console.log(res,next);

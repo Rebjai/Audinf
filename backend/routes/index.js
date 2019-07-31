@@ -6,5 +6,6 @@ Router.use('/support', require('./support'))
 Router.use('/task', require('./task'))
 Router.use('/log', require('./log'))
 Router.use('/group', require('./group'))
+Router.use('/device', require('./device'))
 
 module.exports = Router

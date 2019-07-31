@@ -1,4 +1,4 @@
-const Teacher = require('../models/teacher')
+const Device = require('../models/device')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const { check, oneOf } = require('express-validator/check')
@@ -7,24 +7,15 @@ const { JWT_SECRET } = require('../constants.json')
 
 
 module.exports = {
-    async findAll(req, res, next){
-        // const groups = await Teacher.find({ semester: req.params.id , area: req.body.area})
-        const teachers = await Teacher.find()
-        return res.status(200).json({
-            message: 'encontrado',
-            teachers
-        })
-
-    },
     async register(req, res, next) {
 
-        bcrypt.hash(req.body.password, 10, async (err, encrypted) => {
-            if (err) next(err)
+        // bcrypt.hash(req.body.password, 10, async (err, encrypted) => {
+            // if (err) next(err)
 
-            const user = await new Teacher({
+            const user = await new Device({
                 _id: mongoose.Types.ObjectId(),
-                username: req.body.username,
-                password: encrypted,
+                ip: req.body.ip,
+                room: req.body.room,
                 name: req.body.name,
             }).save()
 
@@ -32,14 +23,14 @@ module.exports = {
             return res.json({
                 message: 'Succesful register.'
             })
-        })
+        // })
 
     },
 
     async login(req, res, next) {
 
         //basic user data (id, username)
-        const data = await Teacher.findOne({ username: req.body.username })
+        const data = await Device.findOne({ username: req.body.username })
         console.log(data);
 
         const token = await jwt.sign(
@@ -64,30 +55,28 @@ module.exports = {
 }
 
 module.exports.validateRegister = [
-    check('username')
+    check('ip')
         .trim()
-        .isLength({ min: 5, max: 16 })
-        .withMessage("Username should be 8 characters")
+        .isLength({ min: 5, max: 28 })
+        .withMessage("Username should be 5 >  < 28 characters")
 
-        .isAlphanumeric()
+        .not().isAlphanumeric()
         .withMessage("The username can only contain letters and numbers.")
 
-        .custom(async value => await Teacher.findOne({ username: value }) == null)
-        .withMessage("Can't find the user"),
+        .custom(async value => await Device.findOne({ ip: value }) == null)
+        .withMessage("ya se registró esa ip"),
 
-    check('password')
-        .isLength({ min: 4, max: 15 })
-        .withMessage("Password must be 4 characters long"),
+    check('room')
+        .isAlphanumeric()
+        .withMessage("room should be a number"),
 
-    check('passwordConfirmation')
-        .custom((value, { req }) => value == req.body.password)
-        .withMessage("Passwords must be the same")
+    
 ]
 
 module.exports.validateLogin = [
     check('password')
         .custom(async (value, { req }) => {
-            const { password } = await Teacher.findOne({ username: req.body.username }).select('password')
+            const { password } = await Device.findOne({ username: req.body.username }).select('password')
             //If password doesn't exist (that's means that user also doesn't exist) return false
             if (!password.length > 1) return resolve(false)
 

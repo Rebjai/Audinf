@@ -17,7 +17,7 @@ module.exports = {
                 username: req.body.username,
                 password: encrypted,
                 name: req.body.name,
-                semester: req.body.semester
+                area: req.body.area
             }).save()
 
 

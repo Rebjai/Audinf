@@ -16,6 +16,10 @@ Router.post('/endDate',
     logController.makeReport,
     error.checkValidation,
     error.catchAsync(logController.login))
+Router.put('/:id',
+    logController.update)
+Router.get('/',
+    logController.findAll)
 
 Router.post('/register',
     logController.validateRegister,

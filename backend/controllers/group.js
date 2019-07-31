@@ -4,6 +4,10 @@ const { check } = require('express-validator/check')
 
 
 module.exports = {
+    sayHi(){
+        console.log("hi group");
+        
+    },
     async register(req, res, next) {
         console.log("regging", req.body);
         
@@ -36,14 +40,28 @@ module.exports = {
             task
         })
     },
+    async getAll(req, res, next) {
+        
+        
+        const groups = await Group.find()
+        console.log("grupos",groups);
+
+
+        
+        return res.status(200).json({
+            message: 'encontrado',
+            groups
+        })
+
+    },
 
     //find all
-    async findAll(req, res, next) {
+    async findSem(req, res, next) {
         
-        const groups = await Group.find({ semester: req.params.semester , area: req.body.area})
-        console.log("grupos",groups);
         console.log("params",req.params);
         console.log("body",req.body);
+        const groups = await Group.find({ semester: req.params.id , area: req.body.area})
+        console.log("grupos",groups);
 
 
         
@@ -114,8 +132,6 @@ module.exports.validateRegister = [
         .isLength({ min: 3, max:5  })
         .withMessage('nombre 3 > && < 5'),
 
-    check('semester').isInt({ max: 10, min: 1 })
-        .withMessage('mal semestre')
 ]
 
 module.exports.validateTaskIsExist = [

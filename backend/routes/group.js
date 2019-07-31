@@ -1,39 +1,23 @@
-const Router = require('express').Router()
-const taskController = require('../controllers/group')
+const groupController = require('../controllers/group')
+const logController = require('../controllers/log')
 const error = require('../middlewares/error')
-const auth = require('../middlewares/auth')
+const Router = require('express').Router()
+//Check auth - required
 
-Router.get('/',
-    auth.verifyToken,
-    error.catchAsync(taskController.findAll))
-Router.post('/:semester',
-    auth.verifyToken,
-    taskController.validateTaskIsExist,
-    taskController.validateTask,
-    error.catchAsync(taskController.findAll))
+// Router.post('/login',
+//     groupController.validateLogin,
+//     // error.catchAsync(logController.makeReport),
+//     error.checkValidation,
+//     error.catchAsync(groupController.login))
+
 
 Router.post('/register',
-    taskController.validateRegister,
+    groupController.validateRegister,
     error.checkValidation,
-    error.catchAsync(taskController.register))
+    error.catchAsync(groupController.register))
 
-Router.post('/',
-    auth.verifyToken,
-    taskController.validateTask,
-    error.checkValidation,
-    error.catchAsync(taskController.create))
-
-Router.put('/:id',
-    auth.verifyToken,
-    taskController.validateTaskIsExist,
-    taskController.validateTask,
-    error.checkValidation,
-    error.catchAsync(taskController.update))
-
-Router.delete('/:id',
-    auth.verifyToken,
-    taskController.validateTaskIsExist,
-    error.checkValidation,
-    error.catchAsync(taskController.delete))
-
+    Router.post('/:id',
+    groupController.findSem)
+    Router.get('/',
+    groupController.getAll)
 module.exports = Router
