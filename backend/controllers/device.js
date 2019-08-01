@@ -7,6 +7,19 @@ const { JWT_SECRET } = require('../constants.json')
 
 
 module.exports = {
+    async findAll(req, res, next){
+        console.log("regging");
+        
+        // const groups = await Teacher.find({ semester: req.params.id , area: req.body.area})
+        const devices = await Device.find()
+        console.log("req", req);
+        
+        return res.status(200).json({
+            message: 'encontrado',
+            devices
+        })
+
+    },
     async register(req, res, next) {
 
         // bcrypt.hash(req.body.password, 10, async (err, encrypted) => {
